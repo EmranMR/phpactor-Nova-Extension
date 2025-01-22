@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "lib": ["dom", "es2015"],
+    "strict": true
+  },
+  "tasks": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  }
+}

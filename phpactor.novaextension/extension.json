@@ -1,0 +1,25 @@
+{
+  "identifier": "emran-mr.phpactor",
+  "name": "phpactor",
+  "organization": "emran-mr",
+  "description": "Lorem ipsum, dolor sit amet.",
+  "version": "1.0",
+  "categories": ["languages"],
+
+  "main": "main.js",
+
+  "entitlements": {
+    "process": true,
+    "filesystem": "readonly",
+    "requests": true
+  },
+
+  "config": [
+    {
+      "key": "example.language-server-path",
+      "title": "Language Server Path",
+      "type": "path",
+      "placeholder": "/usr/local/bin/example"
+    }
+  ]
+}
