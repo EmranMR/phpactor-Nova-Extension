@@ -5,7 +5,6 @@
     "strict": true
   },
   "tasks": {
-    "dev": "tsc --watch",
-    "build": "tsc"
+    "build": "deno run --allow-all build.ts"
   }
 }

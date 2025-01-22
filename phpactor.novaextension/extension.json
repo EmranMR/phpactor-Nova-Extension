@@ -10,7 +10,7 @@
 
   "entitlements": {
     "process": true,
-    "filesystem": "readonly",
+    "filesystem": "readwrite",
     "requests": true
   },
 
