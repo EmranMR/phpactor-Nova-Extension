@@ -35,6 +35,9 @@ var Path = class {
     this.home = nova.path.normalize("~");
   }
   lspExists() {
+    return this.alreadyDownloaded();
+  }
+  alreadyDownloaded() {
     return this.#fileSystem.listdir(this.extension).includes("bin");
   }
 };
@@ -42,26 +45,91 @@ var Path = class {
 // src/models/PHPActor.ts
 var PHPActor = class {
   #url = "https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar";
-  #path;
+  #extensionPath;
   #fs = nova.fs;
+  // octal
+  #filePremission = 457;
+  languageClient = null;
   constructor() {
-    this.#path = new Path();
-    if (!this.#path.lspExists()) {
-      console.log("hello");
-      let file = this.#fs.open(
-        `${this.#path.extension}/bin/text.txt`,
-        "w"
-      );
+    const path = new Path();
+    this.#extensionPath = path.extension;
+    if (path.lspExists()) {
+      this.start();
+    } else {
+      this.makeLSP();
     }
   }
-  async fetch() {
+  start() {
+    if (this.languageClient) {
+      this.languageClient.stop();
+      nova.subscriptions.remove(this.languageClient);
+    }
+    const serverOptions = {
+      path: this.getPath()
+    };
+    const clientOptions = {
+      // The set of document syntaxes for which the server is valid
+      syntaxes: ["php"]
+    };
+    const client = new LanguageClient(
+      "phpactor",
+      "phpactor Language Server",
+      serverOptions,
+      clientOptions
+    );
+    try {
+      client.start();
+      nova.subscriptions.add(client);
+      this.languageClient = client;
+    } catch (err) {
+      if (nova.inDevMode()) {
+        console.error(err);
+      }
+    }
+  }
+  stop() {
+    if (this.languageClient) {
+      this.languageClient.stop();
+      nova.subscriptions.remove(this.languageClient);
+      this.languageClient = null;
+    }
+  }
+  deactivate() {
+    this.stop();
+  }
+  getPath() {
+    return `${this.#extensionPath}/bin/phpactor`;
+  }
+  async fetchBin() {
     try {
       const response = await fetch(this.#url);
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
+      return await response.arrayBuffer();
     } catch (e) {
       console.error(e);
+    }
+  }
+  async makeLSP() {
+    this.makeBinDir();
+    try {
+      const file = this.#fs.open(this.getPath(), "wb");
+      const buffer = await this.fetchBin();
+      if (buffer) {
+        file.write(buffer);
+      }
+      file.close();
+      this.#fs.chmod(this.getPath(), this.#filePremission);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  makeBinDir() {
+    try {
+      this.#fs.mkdir(`${this.#extensionPath}/bin`);
+    } catch (error) {
+      console.error(error);
     }
   }
   run() {

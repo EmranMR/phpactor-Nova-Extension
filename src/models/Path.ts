@@ -9,6 +9,10 @@ export class Path {
   }
 
   public lspExists(): boolean {
+    return this.alreadyDownloaded();
+  }
+
+  private alreadyDownloaded(): boolean {
     return this.#fileSystem.listdir(this.extension).includes("bin");
   }
 }

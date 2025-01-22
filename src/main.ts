@@ -17,7 +17,7 @@ export function deactivate() {
   }
 }
 class ExampleLanguageServer {
-  languageClient: any;
+  languageClient: LanguageClient | null;
   constructor() {
     // Observe the configuration setting for the server's location, and restart the server on change
     nova.config.observe(
