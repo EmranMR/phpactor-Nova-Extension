@@ -1,11 +1,13 @@
 "use strict";
-const lspURL =
-  "https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar";
+import { PHPActor } from "./models/PHPActor.ts";
+
 let langserver: ExampleLanguageServer | null = null;
 export function activate() {
   // Do work when the extension is activated
-  getLSP();
-  langserver = new ExampleLanguageServer();
+  const phpactor = new PHPActor();
+  phpactor.run();
+
+  // langserver = new ExampleLanguageServer();
 }
 export function deactivate() {
   // Clean up state before the extension is deactivated
@@ -71,15 +73,5 @@ class ExampleLanguageServer {
       nova.subscriptions.remove(this.languageClient);
       this.languageClient = null;
     }
-  }
-}
-async function getLSP() {
-  try {
-    const response = await fetch(lspURL);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-  } catch (e) {
-    console.error(e);
   }
 }
