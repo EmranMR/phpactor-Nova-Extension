@@ -46,6 +46,7 @@ var Path = class {
 var PHPActor = class {
   #url = "https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar";
   #extensionPath;
+  #workspacePath = nova.workspace.path;
   #fs = nova.fs;
   // octal
   #filePremission = 457;
@@ -65,11 +66,12 @@ var PHPActor = class {
       nova.subscriptions.remove(this.languageClient);
     }
     const serverOptions = {
-      args: ["language-server", "-vvv"],
+      args: ["language-server", "-d", `${this.#workspacePath}`],
       path: this.getPath()
     };
     const clientOptions = {
       // The set of document syntaxes for which the server is valid
+      debug: true,
       syntaxes: ["php"]
     };
     const client = new LanguageClient(

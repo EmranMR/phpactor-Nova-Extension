@@ -3,6 +3,7 @@ export class PHPActor {
   #url =
     "https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar";
   #extensionPath: string;
+  #workspacePath = nova.workspace.path;
   #fs: FileSystem = nova.fs;
   // octal
   #filePremission = 0o711;
@@ -26,11 +27,12 @@ export class PHPActor {
     }
     // Create the client
     const serverOptions = {
-      args: ["language-server", "-vvv"],
+      args: ["language-server", "-d", `${this.#workspacePath}`],
       path: this.getPath(),
     };
     const clientOptions = {
       // The set of document syntaxes for which the server is valid
+      debug: true,
       syntaxes: ["php"],
     };
     const client = new LanguageClient(
