@@ -26,6 +26,7 @@ export class PHPActor {
     }
     // Create the client
     const serverOptions = {
+      args: ["language-server", "-vvv"],
       path: this.getPath(),
     };
     const clientOptions = {

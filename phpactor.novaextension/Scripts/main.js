@@ -65,6 +65,7 @@ var PHPActor = class {
       nova.subscriptions.remove(this.languageClient);
     }
     const serverOptions = {
+      args: ["language-server", "-vvv"],
       path: this.getPath()
     };
     const clientOptions = {
@@ -139,8 +140,7 @@ var PHPActor = class {
 // src/main.ts
 var langserver = null;
 function activate() {
-  const phpactor = new PHPActor();
-  phpactor.run();
+  langserver = new PHPActor();
 }
 function deactivate() {
   if (langserver) {
