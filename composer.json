@@ -1,0 +1,19 @@
+{
+  "$schema": "https://getcomposer.org/schema.json",
+  "name": "emran/phpactor",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Emran\\Phpactor\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Emran Ramezan",
+      "email": "Emran@opulence.design"
+    }
+  ],
+  "require": {
+    "php": "^8.2"
+  }
+}
