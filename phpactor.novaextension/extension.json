@@ -2,9 +2,10 @@
   "identifier": "emran-mr.phpactor",
   "name": "phpactor",
   "organization": "emran-mr",
-  "description": "Lorem ipsum, dolor sit amet.",
-  "version": "1.0",
-  "categories": ["languages"],
+  "description": "phpactor Language Server Protocol (LSP)",
+  "version": "1.0.0-b",
+  "categories": ["languages", "formatter", "issues"],
+  "min_runtime": "10.0",
 
   "main": "main.js",
 
@@ -14,12 +15,13 @@
     "requests": true
   },
 
-  "config": [
-    {
-      "key": "example.language-server-path",
-      "title": "Language Server Path",
-      "type": "path",
-      "placeholder": "/usr/local/bin/example"
-    }
-  ]
+  "activationEvents": [
+    "onLanguage:php",
+    "onLanguage:blade",
+    "onWorkspaceContains:composer.json"
+  ],
+
+  "repository": "https://github.com/EmranMR/phpactor-Nova-Extension",
+  "funding": "https://github.com/sponsors/EmranMR",
+  "bugs": "https://github.com/EmranMR/phpactor-Nova-Extension/issues"
 }
