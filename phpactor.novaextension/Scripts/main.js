@@ -43,7 +43,7 @@ var Path = class {
 };
 
 // src/models/PHPActor.ts
-var PHPActor = class {
+var PHPactor = class {
   #url = "https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar";
   #extensionPath;
   #workspacePath = nova.workspace.path;
@@ -71,12 +71,12 @@ var PHPActor = class {
     };
     const clientOptions = {
       // The set of document syntaxes for which the server is valid
-      debug: true,
+      // debug: true,
       syntaxes: ["php"]
     };
     const client = new LanguageClient(
-      "phpactor",
-      "phpactor Language Server",
+      "PHPactor",
+      "PHPactor Language Server",
       serverOptions,
       clientOptions
     );
@@ -142,7 +142,7 @@ var PHPActor = class {
 // src/main.ts
 var langserver = null;
 function activate() {
-  langserver = new PHPActor();
+  langserver = new PHPactor();
 }
 function deactivate() {
   if (langserver) {

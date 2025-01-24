@@ -1,7 +1,7 @@
-import { Path } from './Path.ts';
-export class PHPActor {
+import { Path } from "./Path.ts";
+export class PHPactor {
   #url =
-    'https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar';
+    "https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar";
   #extensionPath: string;
   #workspacePath = nova.workspace.path;
   #fs: FileSystem = nova.fs;
@@ -27,17 +27,17 @@ export class PHPActor {
     }
     // Create the client
     const serverOptions = {
-      args: ['language-server', '-d', `${this.#workspacePath}`],
+      args: ["language-server", "-d", `${this.#workspacePath}`],
       path: this.getPath(),
     };
     const clientOptions = {
       // The set of document syntaxes for which the server is valid
       // debug: true,
-      syntaxes: ['php'],
+      syntaxes: ["php"],
     };
     const client = new LanguageClient(
-      'phpactor',
-      'phpactor Language Server',
+      "PHPactor",
+      "PHPactor Language Server",
       serverOptions,
       clientOptions,
     );
@@ -88,7 +88,7 @@ export class PHPActor {
     this.makeBinDir();
 
     try {
-      const file = this.#fs.open(this.getPath(), 'wb');
+      const file = this.#fs.open(this.getPath(), "wb");
 
       const buffer = await this.fetchBin();
       if (buffer) {

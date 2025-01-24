@@ -1,10 +1,10 @@
 "use strict";
-import { PHPActor } from "./models/PHPActor.ts";
+import { PHPactor } from "./models/PHPActor.ts";
 
-let langserver: PHPActor | null = null;
+let langserver: PHPactor | null = null;
 export function activate() {
   // Do work when the extension is activated
-  langserver = new PHPActor();
+  langserver = new PHPactor();
 }
 export function deactivate() {
   // Clean up state before the extension is deactivated
