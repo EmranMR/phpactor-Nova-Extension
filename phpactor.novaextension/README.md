@@ -15,11 +15,11 @@ Let's get started!
 ## ⚠️ Do NOT use/replace Intelephense just yet! but feel free to play around with it 😜
 
 An Extension porting the superb
-**[phpactor LSP](https://github.com/phpactor/phpactor)**! with **An Important
-Language**. I personally find **phpactor** way more superior, compared to
-Intelephense, simply because of the limitless, refactoring possibilities it
+**[phpactor Language Server](https://github.com/phpactor/phpactor)**! with **An
+Important Language**. I personally find **phpactor** way more superior, compared
+to Intelephense, simply because of the limitless, refactoring possibilities it
 offers to a **PHP** 🐘 project! Nova 🌌 happens to be a **perfect** fit for this
-LSP, to utilise all it's goodies via the _code action_
+Language Server, to utilise all it's goodies via the _code action_
 
 > ⚠️ How to, tutorials, and examples will be added in due course once the pesky
 > bugs are fixed 🐞
@@ -116,11 +116,11 @@ P.S. If you'd like, you can remove these comments before submitting your extensi
 
 ## Credits:
 
-- **phpactor LSP** by Daniel and Contributors
+- **phpactor Language Server** by Daniel and Contributors
   [Github](https://github.com/phpactor/phpactor)
 - I used the `build.ts` (modified for this project) from the
-  [Nova Deno LSP project by Sam](https://github.com/sgwilym/nova-deno) for
-  bundling my source code
+  [Nova Deno Language Server project by Sam](https://github.com/sgwilym/nova-deno)
+  for bundling my source code
 - The `nova.d.ts` is assembeled by
   [Tommaso - Nova Types](https://github.com/tommasongr/nova-types). Although I
   had to adjust a bit and will do a pull request soon for some of the APIs!
