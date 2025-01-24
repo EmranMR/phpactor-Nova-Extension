@@ -2,25 +2,25 @@
   "identifier": "emran-mr.phpactor",
   "name": "PHPactor",
   "organization": "emran-mr",
-  "description": "phpactor Language Server Protocol (LSP)",
+  "description": "phpactor Language Server",
   "version": "1.0.1",
-  "categories": ["languages", "formatters", "issues"],
+  "categories": [
+    "languages",
+    "formatters",
+    "issues"
+  ],
   "min_runtime": "10.0",
-
   "main": "main.js",
-
   "entitlements": {
     "process": true,
     "filesystem": "readwrite",
     "requests": true
   },
-
   "activationEvents": [
     "onLanguage:php",
     "onLanguage:blade",
     "onWorkspaceContains:composer.json"
   ],
-
   "repository": "https://github.com/EmranMR/phpactor-Nova-Extension",
   "funding": "https://github.com/sponsors/EmranMR",
   "bugs": "https://github.com/EmranMR/phpactor-Nova-Extension/issues"
