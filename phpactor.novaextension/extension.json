@@ -2,13 +2,9 @@
   "identifier": "emran-mr.phpactor",
   "name": "PHPactor",
   "organization": "emran-mr",
-  "description": "phpactor Language Server",
+  "description": "phpactor PHP Language Server",
   "version": "1.0.1",
-  "categories": [
-    "languages",
-    "formatters",
-    "issues"
-  ],
+  "categories": ["languages", "formatters", "issues"],
   "min_runtime": "10.0",
   "main": "main.js",
   "entitlements": {
