@@ -1,11 +1,14 @@
 export class Path {
-  extension: string;
   home: string;
-  #fileSystem: FileSystem = nova.fs;
+  #fs: FileSystem = nova.fs;
+
+  readonly #local: string;
+  readonly #localBin: string;
 
   constructor() {
-    this.extension = nova.extension.path;
     this.home = nova.path.normalize("~");
+    this.#local = `${this.home}/.local`;
+    this.#localBin = `${this.#local}/bin`;
   }
 
   public lspExists(): boolean {
@@ -13,6 +16,28 @@ export class Path {
   }
 
   private alreadyDownloaded(): boolean {
-    return this.#fileSystem.listdir(this.extension).includes("bin");
+    return this.#fs
+      .listdir(`${this.home}/.local/bin`)
+      .includes("phpactor");
+  }
+
+  private directoryExists(path: string): boolean {
+    return this.#fs.access(`${path}`, this.#fs.F_OK);
+  }
+
+  public makeBinDir() {
+    if (this.directoryExists(this.#localBin)) {
+      return;
+    } else {
+      try {
+        this.#fs.mkdir(this.#localBin);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
+  public getBinPath(binName: string) {
+    return `${this.#localBin}/${binName}`;
   }
 }

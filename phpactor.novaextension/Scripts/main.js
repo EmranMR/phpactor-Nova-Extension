@@ -27,37 +27,57 @@ module.exports = __toCommonJS(main_exports);
 
 // src/models/Path.ts
 var Path = class {
-  extension;
   home;
-  #fileSystem = nova.fs;
+  #fs = nova.fs;
+  #local;
+  #localBin;
   constructor() {
-    this.extension = nova.extension.path;
     this.home = nova.path.normalize("~");
+    this.#local = `${this.home}/.local`;
+    this.#localBin = `${this.#local}/bin`;
   }
   lspExists() {
     return this.alreadyDownloaded();
   }
   alreadyDownloaded() {
-    return this.#fileSystem.listdir(this.extension).includes("bin");
+    return this.#fs.listdir(`${this.home}/.local/bin`).includes("phpactor");
+  }
+  directoryExists(path) {
+    return this.#fs.access(`${path}`, this.#fs.F_OK);
+  }
+  makeBinDir() {
+    if (this.directoryExists(this.#localBin)) {
+      return;
+    } else {
+      try {
+        this.#fs.mkdir(this.#localBin);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+  getBinPath(binName) {
+    return `${this.#localBin}/${binName}`;
   }
 };
 
 // src/models/PHPActor.ts
 var PHPactor = class {
   #url = "https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar";
-  #extensionPath;
   #workspacePath = nova.workspace.path;
   #fs = nova.fs;
   // octal
   #filePremission = 457;
   languageClient = null;
+  #path;
+  #name = "phpactor";
   constructor() {
-    const path = new Path();
-    this.#extensionPath = path.extension;
-    if (path.lspExists()) {
+    this.#path = new Path();
+    if (this.#path.lspExists()) {
       this.start();
     } else {
       this.makeLSP();
+      this.start();
     }
   }
   start() {
@@ -67,7 +87,7 @@ var PHPactor = class {
     }
     const serverOptions = {
       args: ["language-server", "-d", `${this.#workspacePath}`],
-      path: this.getPath()
+      path: this.#path.getBinPath(this.#name)
     };
     const clientOptions = {
       // The set of document syntaxes for which the server is valid
@@ -100,13 +120,12 @@ var PHPactor = class {
   deactivate() {
     this.stop();
   }
-  getPath() {
-    return `${this.#extensionPath}/bin/phpactor`;
-  }
   async fetchBin() {
     try {
       const response = await fetch(this.#url);
+      this.notify("\u2705 phpactor Successfuly Downloaded");
       if (!response.ok) {
+        this.notify("\u274C Download Failed");
         throw new Error(`Response status: ${response.status}`);
       }
       return await response.arrayBuffer();
@@ -115,27 +134,32 @@ var PHPactor = class {
     }
   }
   async makeLSP() {
-    this.makeBinDir();
+    this.#path.makeBinDir();
     try {
-      const file = this.#fs.open(this.getPath(), "wb");
+      const file = this.#fs.open(
+        this.#path.getBinPath(this.#name),
+        "wb"
+      );
       const buffer = await this.fetchBin();
       if (buffer) {
         file.write(buffer);
       }
       file.close();
-      this.#fs.chmod(this.getPath(), this.#filePremission);
+      this.#fs.chmod(
+        this.#path.getBinPath(this.#name),
+        this.#filePremission
+      );
+      this.notify("\u2705 LSP is successfully installed");
     } catch (e) {
+      this.notify("\u274C Could Not Install");
       console.error(e);
     }
   }
-  makeBinDir() {
-    try {
-      this.#fs.mkdir(`${this.#extensionPath}/bin`);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  run() {
+  notify(message) {
+    const request = new NotificationRequest();
+    request.title = nova.localize("PHPactor Extension");
+    request.body = nova.localize(message);
+    nova.notifications.add(request);
   }
 };
 
