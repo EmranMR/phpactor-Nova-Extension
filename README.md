@@ -50,7 +50,7 @@ phpactor requires some additional tools to be installed on your Mac:
   > phpactor will perform better with Composer and, to a lesser extent, with
   > git.
 - If you are working using one of the commonly used **PHP frameworks** like
-  _laravel_, _symphony_ you do not need to do anything 😊
+  _Laravel_, _Symfonyy_ you do not need to do anything 😊
 - For hardcore **raw PHP** as such you need a properly composer project set up.
   to get the bare minimum, **PHP standard library** support, you should do:
   - Having a proper **PSR** standard configured in your `composer.json`, would
