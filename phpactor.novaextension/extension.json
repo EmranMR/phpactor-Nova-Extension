@@ -1,10 +1,10 @@
 {
   "identifier": "emran-mr.phpactor",
-  "name": "phpactor",
+  "name": "PHPactor",
   "organization": "emran-mr",
   "description": "phpactor Language Server Protocol (LSP)",
-  "version": "1.0.0-b",
-  "categories": ["languages", "formatter", "issues"],
+  "version": "1.0.0",
+  "categories": ["languages", "formatters", "issues"],
   "min_runtime": "10.0",
 
   "main": "main.js",
