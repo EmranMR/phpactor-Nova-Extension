@@ -1,5 +1,5 @@
 "use strict";
-import { PHPactor } from "./models/PHPActor.ts";
+import { PHPactor } from "./models/PHPactor.ts";
 
 let langserver: PHPactor | null = null;
 export function activate() {

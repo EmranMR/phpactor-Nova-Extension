@@ -14,15 +14,17 @@ Let's get started!
 
 ## ⚠️ Do NOT use/replace Intelephense just yet! but feel free to play around with it 😜
 
-An Extension porting the superb
-**[phpactor Language Server](https://github.com/phpactor/phpactor)**! with **An
-Important Language**. I personally find **phpactor** way more superior, compared
-to Intelephense, simply because of the limitless, refactoring possibilities it
-offers to a **PHP** 🐘 project! Nova 🌌 happens to be a **perfect** fit for this
-Language Server, to utilise all it's goodies via the _code action_
+This extension ports the excellent
+**[phpactor Language Server](https://github.com/phpactor/phpactor)**
+for use with Nova! with **An Important Language**.
 
-> ⚠️ How to, tutorials, and examples will be added in due course once the pesky
-> bugs are fixed 🐞
+I find **phpactor** far superior to Intelephense because of the
+limitless refactoring possibilities it offers for **PHP** 🐘 projects.
+Nova 🌌 is a **perfect** fit for this language server, making it easy
+to utilise all its features via the _code action_.
+
+> ⚠️ Tutorials, examples, and detailed usage instructions will be
+> added once the pesky bugs 🐞 are fixed.
 
 <!--
 🎈 It can also be helpful to include a screenshot or GIF showing your extension in action:
@@ -36,33 +38,38 @@ Language Server, to utilise all it's goodies via the _code action_
 
 phpactor requires some additional tools to be installed on your Mac:
 
-- The extension automatically downloads a copy of `phpactor` exec and use it (no
-  need to download)
+The extension automatically downloads a copy of the latest phpactor
+executable (no manual download required).
+
 - Composer
 - Git
 - PHP 8.1+
-  - you also need to require **PHP 8.1+** as a _platform package_ in your
-    `composer.json` see below 👇
+  - you also need to require **PHP 8.1+** as a _platform package_ in
+    your `composer.json` see below 👇
 
 ## Project Recommendation
 
-- As noted by [phpactor]()
-  > phpactor will perform better with Composer and, to a lesser extent, with
-  > git.
-- If you are working using one of the commonly used **PHP frameworks** like
-  _Laravel_, _Symfonyy_ you do not need to do anything 😊
-- For hardcore **raw PHP** as such you need a properly composer project set up.
-  to get the bare minimum, **PHP standard library** support, you should do:
-  - Having a proper **PSR** standard configured in your `composer.json`, would
-    greatly provides more refactoring options!
-  - The more detail you provide in `composer.json` the more you get out of the
-    **phpactor!** 😝
+- As noted by
+  [phpactor](https://phpactor.readthedocs.io/en/master/usage/standalone.html#health-check)
+  > phpactor will perform better with Composer and, to a lesser
+  > extent, with git.
+- If you're working with a commonly used **PHP frameworks** like
+  _Laravel_, _Symfony_ ,no additional setup is needed 😊.
+- For **raw PHP** projects, you’ll need a properly configured Composer
+  project. To get the bare minimum support for the **PHP standard
+  library** do the following:
 
-```shell
-git init \
-composer init \
-composer require php ^8.1 \
-```
+  ```shell
+  git init \
+  composer init \
+  composer require php ^8.1 \
+  ```
+
+  - Having a proper **PSR** standard configured in your
+    `composer.json`, greatly enhances the refactoring options
+    available.
+  - The more detailed your `composer.json` the more value you’ll get
+    out of **phpactor!** 😝
 
 <!--
 ✨ Providing tips, tricks, or other guides for installing or configuring external dependencies can go a long way toward helping your users have a good setup experience:
@@ -86,8 +93,10 @@ composer require php ^8.1 \
 🎈 If your extension offers global- or workspace-scoped preferences, consider pointing users toward those settings. For example:
 -->
 
-- For now the default locations are used see
+- the default configuration locations are used. Refer to the
   [the docs](https://phpactor.readthedocs.io/en/master/usage/configuration.html)
+  - I will add a `dump` command in the future to export the current
+    configuration in your project's root
 
 ```
 **/workspace/.phpactor.yml
@@ -105,14 +114,15 @@ P.S. If you'd like, you can remove these comments before submitting your extensi
 
 #### To Do
 
-- [ ] Adding the possibility not to download `phpactor`, if the exec already
-      exist in you `PATH` or give you an option to use your own. It only
-      downloads once when the extension is loaded!
-- [ ] Add commands to support few of the missed out refactoring actions
+- [ ] Adding the possibility not to download `phpactor`, if the exec
+      already exist in you `PATH` or give you an option to use your
+      own. It only downloads once when the extension is loaded!
+- [ ] Add commands to support few of the missed out refactoring
+      actions
 - [ ] Configuration via Nova GUI
-- [ ] Better error handling
-- [ ] Providing useful extension notification like downloading, completing or
-      any corresponding error
+- [x] Better error handling
+- [x] Providing useful extension notification like downloading,
+      completing or any corresponding error
 
 ## Credits:
 
@@ -122,5 +132,6 @@ P.S. If you'd like, you can remove these comments before submitting your extensi
   [Nova Deno Language Server project by Sam](https://github.com/sgwilym/nova-deno)
   for bundling my source code
 - The `nova.d.ts` is assembeled by
-  [Tommaso - Nova Types](https://github.com/tommasongr/nova-types). Although I
-  had to adjust a bit and will do a pull request soon for some of the APIs!
+  [Tommaso - Nova Types](https://github.com/tommasongr/nova-types). I
+  made some adjustments and plan to submit a pull request for
+  additional APIs!

@@ -25,6 +25,35 @@ __export(main_exports, {
 });
 module.exports = __toCommonJS(main_exports);
 
+// src/Commands/CleanCache.ts
+var CacheClean = class {
+  name = "cleanCache";
+  options = { args: ["cache:clear"] };
+  process;
+  phpactor;
+  commands = nova.commands;
+  constructor(phpactor) {
+    this.phpactor = phpactor;
+    this.process = new Process(phpactor.path(), this.options);
+    this.commands.register(this.name, this.run, this);
+  }
+  run(_editor) {
+    this.phpactor.stop();
+    this.clean();
+    this.phpactor.start();
+  }
+  clean() {
+    try {
+      this.process.start();
+      this.phpactor.notify("\u2705 Cache Cleaned");
+    } catch (_e) {
+      this.phpactor.notify(
+        "\u274C Was unable to clean cache (raise an issue? \u{1F914})"
+      );
+    }
+  }
+};
+
 // src/models/Path.ts
 var Path = class {
   home;
@@ -61,7 +90,7 @@ var Path = class {
   }
 };
 
-// src/models/PHPActor.ts
+// src/models/PHPactor.ts
 var PHPactor = class {
   #url = "https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar";
   #workspacePath = nova.workspace.path;
@@ -79,26 +108,21 @@ var PHPactor = class {
       this.makeLSP();
       this.start();
     }
+    this.registerCommands();
+  }
+  registerCommands() {
+    new CacheClean(this);
   }
   start() {
     if (this.languageClient) {
       this.languageClient.stop();
       nova.subscriptions.remove(this.languageClient);
     }
-    const serverOptions = {
-      args: ["language-server", "-d", `${this.#workspacePath}`],
-      path: this.#path.getBinPath(this.#name)
-    };
-    const clientOptions = {
-      // The set of document syntaxes for which the server is valid
-      // debug: true,
-      syntaxes: ["php"]
-    };
     const client = new LanguageClient(
       "PHPactor",
       "PHPactor Language Server",
-      serverOptions,
-      clientOptions
+      this.serverOptions(),
+      this.clientOptions()
     );
     try {
       client.start();
@@ -109,6 +133,17 @@ var PHPactor = class {
         console.error(err);
       }
     }
+  }
+  clientOptions() {
+    return {
+      syntaxes: ["php"]
+    };
+  }
+  serverOptions() {
+    return {
+      args: ["language-server", "-d", `${this.#workspacePath}`],
+      path: this.path()
+    };
   }
   stop() {
     if (this.languageClient) {
@@ -136,24 +171,21 @@ var PHPactor = class {
   async makeLSP() {
     this.#path.makeBinDir();
     try {
-      const file = this.#fs.open(
-        this.#path.getBinPath(this.#name),
-        "wb"
-      );
+      const file = this.#fs.open(this.path(), "wb");
       const buffer = await this.fetchBin();
       if (buffer) {
         file.write(buffer);
       }
       file.close();
-      this.#fs.chmod(
-        this.#path.getBinPath(this.#name),
-        this.#filePremission
-      );
+      this.#fs.chmod(this.path(), this.#filePremission);
       this.notify("\u2705 LSP is successfully installed");
     } catch (e) {
       this.notify("\u274C Could Not Install");
       console.error(e);
     }
+  }
+  path() {
+    return this.#path.getBinPath(this.#name);
   }
   notify(message) {
     const request = new NotificationRequest();

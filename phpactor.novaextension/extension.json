@@ -3,7 +3,7 @@
   "name": "PHPactor",
   "organization": "emran-mr",
   "description": "phpactor PHP Language Server",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "categories": ["languages", "formatters", "issues"],
   "min_runtime": "10.0",
   "main": "main.js",
@@ -12,11 +12,23 @@
     "filesystem": "readwrite",
     "requests": true
   },
+  "commands": {
+    "extensions": [
+      {
+        "title": "PHPactor: Clean Cache",
+        "command": "cleanCache",
+        "filters": {
+          "syntaxes": ["php"]
+        }
+      }
+    ]
+  },
   "activationEvents": [
     "onLanguage:php",
     "onLanguage:blade",
     "onWorkspaceContains:composer.json"
   ],
+
   "repository": "https://github.com/EmranMR/phpactor-Nova-Extension",
   "funding": "https://github.com/sponsors/EmranMR",
   "bugs": "https://github.com/EmranMR/phpactor-Nova-Extension/issues"

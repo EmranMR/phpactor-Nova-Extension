@@ -1,3 +1,4 @@
+import { CacheClean } from "../Commands/CleanCache.ts";
 import { Path } from "./Path.ts";
 export class PHPactor {
   #url =
@@ -13,13 +14,18 @@ export class PHPactor {
 
   constructor() {
     this.#path = new Path();
-
     if (this.#path.lspExists()) {
       this.start();
     } else {
       this.makeLSP();
       this.start();
     }
+
+    this.registerCommands();
+  }
+
+  private registerCommands() {
+    new CacheClean(this);
   }
 
   start() {
@@ -28,20 +34,11 @@ export class PHPactor {
       nova.subscriptions.remove(this.languageClient);
     }
     // Create the client
-    const serverOptions = {
-      args: ["language-server", "-d", `${this.#workspacePath}`],
-      path: this.#path.getBinPath(this.#name),
-    };
-    const clientOptions = {
-      // The set of document syntaxes for which the server is valid
-      // debug: true,
-      syntaxes: ["php"],
-    };
     const client = new LanguageClient(
       "PHPactor",
       "PHPactor Language Server",
-      serverOptions,
-      clientOptions,
+      this.serverOptions(),
+      this.clientOptions(),
     );
     try {
       // Start the client
@@ -55,6 +52,19 @@ export class PHPactor {
         console.error(err);
       }
     }
+  }
+
+  private clientOptions() {
+    return {
+      syntaxes: ["php"],
+    };
+  }
+
+  private serverOptions() {
+    return {
+      args: ["language-server", "-d", `${this.#workspacePath}`],
+      path: this.path(),
+    };
   }
 
   stop() {
@@ -86,10 +96,7 @@ export class PHPactor {
   private async makeLSP() {
     this.#path.makeBinDir();
     try {
-      const file = this.#fs.open(
-        this.#path.getBinPath(this.#name),
-        "wb",
-      );
+      const file = this.#fs.open(this.path(), "wb");
 
       const buffer = await this.fetchBin();
       if (buffer) {
@@ -97,10 +104,7 @@ export class PHPactor {
       }
 
       file.close();
-      this.#fs.chmod(
-        this.#path.getBinPath(this.#name),
-        this.#filePremission,
-      );
+      this.#fs.chmod(this.path(), this.#filePremission);
       this.notify("✅ LSP is successfully installed");
     } catch (e) {
       this.notify("❌ Could Not Install");
@@ -108,7 +112,11 @@ export class PHPactor {
     }
   }
 
-  private notify(message: string) {
+  public path(): string {
+    return this.#path.getBinPath(this.#name);
+  }
+
+  public notify(message: string) {
     const request = new NotificationRequest();
 
     request.title = nova.localize("PHPactor Extension");

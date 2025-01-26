@@ -2077,6 +2077,52 @@ interface Path {
 type ReadableStream<T = any> = any;
 type WritableStream<T = any> = any;
 
+type ProcessOptions = {
+  /** Additional arguments to pass. */
+  args?: string[];
+  /** Additional environment variables to set. */
+  env?: {
+    [key: string]: string;
+  };
+  /** The current working directory path to set for the process. */
+  cwd?: string;
+  /**
+   * Options for configuring the stdio channels.
+   *
+   * To directly configure each of the stdio channels, specify an array of three elements, each representing how to set up standard in, standard out, and standard error, respectively.
+   *
+   * If an element is `"pipe"`, then a standard pipe will be set up for the channel. The pipe will be exposed through the resulting process’s `stdio` array property at the corresponding index as a WritableStream (stdin) or ReadableStream (stdout and stderr) object.
+   *
+   * If an element is `"ignore"`, then no channel will be set up.
+   *
+   * Passing a number for the element will treat the value as a file descriptor, which must already exist, and set up a channel reading or writing to that descriptor. Passing the values 0, 1, and 2 is effectively the same as setting up a pipe to the parent process’s standard in, standard out, and standard error.
+   *
+   * For convenience, passing the values `"pipe"` or `"ignore"` instead of an array is effectively the same as passing an array of three of that value (such as `["pipe", "pipe", "pipe"]`).
+   *
+   * Additionally, the value `"jsonrpc"` may be passed instead of an array to set up the entire stdio suite to use JSON-RPC communication. If this is done, then the `.request()`, `.notify()`, `.onRequest()`, and `.onNotify()` methods of the resulting process object become available.
+   *
+   * The `stdio` property of the resulting process will only contain a stream value for an element if that element was set up using `pipe`. In all other cases, the value of the `stdio` property’s element will be `null` and it is up to the caller to set up any additional communication.
+   *
+   * By default, if no `stdio` option is passed, it is the same as passing the value `["pipe", "pipe", "pipe"]`.
+   */
+  stdio?:
+    | ['pipe' | 'ignore', 'pipe' | 'ignore', 'pipe' | 'ignore']
+    | 'pipe'
+    | 'ignore'
+    | 'jsonrpc'
+    | number;
+  /**
+   * Run the subprocess within a shell.
+   *
+   * If the value of the shell option is `true`, the subprocess will be invoked using `/bin/sh`. If it’s a string, the shell path specified by the string will be used.
+   *
+   * Any arguments and environment set up for the subprocess will be passed to the shell, and then forwarded to the subprocess by the shell normally.
+   *
+   * Warning: Executing arbitrary processes with arguments within a shell environment may be susceptible to shell injection attacks. Care should be taken to sanitize any input that is passed to the shell environment.
+   */
+  shell?: true | string;
+};
+
 /**
  * A `Process` object can be used to launch a subprocess, establish communication channels, and listen for events.
  *
@@ -2084,56 +2130,7 @@ type WritableStream<T = any> = any;
  */
 declare class Process {
   /** Creates a `Process` object that will launch the executable represented by `command`. */
-  constructor(
-    command: string,
-    options?: {
-      /** Additional arguments to pass. */
-      args?: string[];
-
-      /** Additional environment variables to set. */
-      env?: { [key: string]: string };
-
-      /** The current working directory path to set for the process. */
-      cwd?: string;
-
-      /**
-       * Options for configuring the stdio channels.
-       *
-       * To directly configure each of the stdio channels, specify an array of three elements, each representing how to set up standard in, standard out, and standard error, respectively.
-       *
-       * If an element is `"pipe"`, then a standard pipe will be set up for the channel. The pipe will be exposed through the resulting process’s `stdio` array property at the corresponding index as a WritableStream (stdin) or ReadableStream (stdout and stderr) object.
-       *
-       * If an element is `"ignore"`, then no channel will be set up.
-       *
-       * Passing a number for the element will treat the value as a file descriptor, which must already exist, and set up a channel reading or writing to that descriptor. Passing the values 0, 1, and 2 is effectively the same as setting up a pipe to the parent process’s standard in, standard out, and standard error.
-       *
-       * For convenience, passing the values `"pipe"` or `"ignore"` instead of an array is effectively the same as passing an array of three of that value (such as `["pipe", "pipe", "pipe"]`).
-       *
-       * Additionally, the value `"jsonrpc"` may be passed instead of an array to set up the entire stdio suite to use JSON-RPC communication. If this is done, then the `.request()`, `.notify()`, `.onRequest()`, and `.onNotify()` methods of the resulting process object become available.
-       *
-       * The `stdio` property of the resulting process will only contain a stream value for an element if that element was set up using `pipe`. In all other cases, the value of the `stdio` property’s element will be `null` and it is up to the caller to set up any additional communication.
-       *
-       * By default, if no `stdio` option is passed, it is the same as passing the value `["pipe", "pipe", "pipe"]`.
-       */
-      stdio?:
-        | ['pipe' | 'ignore', 'pipe' | 'ignore', 'pipe' | 'ignore']
-        | 'pipe'
-        | 'ignore'
-        | 'jsonrpc'
-        | number;
-
-      /**
-       * Run the subprocess within a shell.
-       *
-       * If the value of the shell option is `true`, the subprocess will be invoked using `/bin/sh`. If it’s a string, the shell path specified by the string will be used.
-       *
-       * Any arguments and environment set up for the subprocess will be passed to the shell, and then forwarded to the subprocess by the shell normally.
-       *
-       * Warning: Executing arbitrary processes with arguments within a shell environment may be susceptible to shell injection attacks. Care should be taken to sanitize any input that is passed to the shell environment.
-       */
-      shell?: true | string;
-    },
-  );
+  constructor(command: string, options?: ProcessOptions);
 
   /** The arguments passed to the process (as an Array), including any specified when the Process was constructed. */
   readonly args: ReadonlyArray<string>;
