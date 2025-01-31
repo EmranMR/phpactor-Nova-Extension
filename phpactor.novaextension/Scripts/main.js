@@ -30,11 +30,11 @@ var CacheClean = class {
   name = "cleanCache";
   options = { args: ["cache:clear"] };
   process;
+  // needs the ! due to strict type check
   phpactor;
   commands = nova.commands;
   constructor(phpactor) {
     this.phpactor = phpactor;
-    this.process = new Process(phpactor.path(), this.options);
     this.commands.register(this.name, this.run, this);
   }
   run(_editor) {
@@ -44,8 +44,9 @@ var CacheClean = class {
   }
   clean() {
     try {
+      this.process = new Process(this.phpactor.path(), this.options);
       this.process.start();
-      this.phpactor.notify("\u2705 Cache Cleaned");
+      this.phpactor.notify("\u2705 Cache Successfuly Cleared");
     } catch (_e) {
       this.phpactor.notify(
         "\u274C Was unable to clean cache (raise an issue? \u{1F914})"
